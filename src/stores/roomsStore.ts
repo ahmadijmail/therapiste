@@ -39,18 +39,6 @@ export const useRoomsStore = create<RoomsStore>((set, get) => ({
     try {
       set({ loading: true, error: null });
       
-      // First, let's check all rooms without filtering
-      const { data: allRooms, error: allError } = await supabase
-        .from('rooms')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (allError) throw allError;
-      
-      console.log('📊 All rooms found:', allRooms?.length || 0);
-      console.log('📊 Room is_active status:', allRooms?.map(r => ({ slug: r.slug, is_active: r.is_active })));
-      
-      // Now filter for active rooms
       const { data, error } = await supabase
         .from('rooms')
         .select('*')
@@ -58,8 +46,6 @@ export const useRoomsStore = create<RoomsStore>((set, get) => ({
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      
-      console.log('📊 Active rooms found:', data?.length || 0);
       
       set({ rooms: data || [] });
     } catch (error) {
