@@ -22,7 +22,7 @@ export default function AuthScreen() {
           headerShown: false 
         }} 
       />
-      <View className="flex-1 bg-white">
+      <View className="flex-1 bg-background">
         <LoginForm 
           onSuccess={handleAuthSuccess}
           onForgotPassword={handleForgotPassword}

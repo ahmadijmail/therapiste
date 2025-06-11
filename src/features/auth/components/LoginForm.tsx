@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
-  TextInput,
-  TouchableOpacity,
   Alert,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -13,6 +9,13 @@ import {
 import { useAuthStore } from '../../../stores/authStore';
 import { validateEmail, validatePassword } from '../api/auth';
 import type { LoginCredentials, RegisterCredentials } from '../../../types';
+
+// shadcn/ui components
+import { Button } from '~/src/components/ui/button';
+import { Text } from '~/src/components/ui/text';
+import { Input } from '~/src/components/ui/input';
+import { Label } from '~/src/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/src/components/ui/card';
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -142,35 +145,7 @@ export default function LoginForm({
     });
   };
 
-  const InputField = ({ 
-    label, 
-    value, 
-    onChangeText, 
-    error, 
-    ...props 
-  }: {
-    label: string;
-    value: string;
-    onChangeText: (text: string) => void;
-    error?: string;
-    [key: string]: any;
-  }) => (
-    <View className="mb-4">
-      <Text className="text-gray-700 font-medium mb-2">{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        className={`border rounded-lg px-4 py-3 text-gray-900 ${
-          error ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white'
-        }`}
-        placeholderTextColor="#9CA3AF"
-        {...props}
-      />
-      {error ? (
-        <Text className="text-red-500 text-sm mt-1">{error}</Text>
-      ) : null}
-    </View>
-  );
+
 
   return (
     <KeyboardAvoidingView 
@@ -178,129 +153,149 @@ export default function LoginForm({
       className="flex-1"
     >
       <ScrollView 
-        className="flex-1 bg-white"
+        className="flex-1 bg-background"
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View className="flex-1 justify-center px-6 py-8">
-          {/* Header */}
-          <View className="items-center mb-8">
-            <Text className="text-3xl font-bold text-gray-900 mb-2">
-              {isLogin ? 'Welcome Back' : 'Join Therapiste'}
-            </Text>
-            <Text className="text-gray-600 text-center">
-              {isLogin 
-                ? 'Sign in to continue your journey' 
-                : 'Start your mental health journey with a 3-day free trial'
-              }
-            </Text>
-          </View>
+        <View className="flex-1 justify-center px-6 py-8 ">
+          <Card className="mx-4 p-6  ">
+            <CardHeader className="items-center pb-6">
+              <CardTitle className="text-3xl font-bold text-center">
+                {isLogin ? 'Welcome Back' : 'Join Therapiste'}
+              </CardTitle>
+              <CardDescription className="text-center">
+                {isLogin 
+                  ? 'Sign in to continue your journey' 
+                  : 'Start your mental health journey with a 3-day free trial'
+                }
+              </CardDescription>
+            </CardHeader>
 
-          {/* Form */}
+            <CardContent>
+              {/* Form */}
           <View className="space-y-4">
             {/* Full Name (Register only) */}
             {!isLogin && (
-              <InputField
-                label="Full Name"
-                value={formData.fullName}
-                onChangeText={(text) => handleInputChange('fullName', text)}
-                error={errors.fullName}
-                placeholder="Enter your full name"
-                autoCapitalize="words"
-                textContentType="name"
-              />
+              <View className="mb-4">
+                <Label className="text-foreground font-medium mb-2">Full Name</Label>
+                <Input
+                  value={formData.fullName}
+                  onChangeText={(text: string) => handleInputChange('fullName', text)}
+                  className={errors.fullName ? 'border-destructive' : ''}
+                  placeholder="Enter your full name"
+                  autoCapitalize="words"
+                  textContentType="name"
+                />
+                {errors.fullName ? (
+                  <Text className="text-destructive text-sm mt-1">{errors.fullName}</Text>
+                ) : null}
+              </View>
             )}
 
             {/* Email */}
-            <InputField
-              label="Email Address"
-              value={formData.email}
-              onChangeText={(text) => handleInputChange('email', text)}
-              error={errors.email}
-              placeholder="Enter your email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              textContentType="emailAddress"
-            />
+            <View className="mb-4">
+              <Label className="text-foreground font-medium mb-2">Email Address</Label>
+              <Input
+                value={formData.email}
+                onChangeText={(text: string) => handleInputChange('email', text)}
+                className={errors.email ? 'border-destructive' : ''}
+                placeholder="Enter your email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                textContentType="emailAddress"
+              />
+              {errors.email ? (
+                <Text className="text-destructive text-sm mt-1">{errors.email}</Text>
+              ) : null}
+            </View>
 
             {/* Password */}
-            <InputField
-              label="Password"
-              value={formData.password}
-              onChangeText={(text) => handleInputChange('password', text)}
-              error={errors.password}
-              placeholder={isLogin ? "Enter your password" : "Create a strong password"}
-              secureTextEntry
-              textContentType={isLogin ? "password" : "newPassword"}
-            />
+            <View className="mb-4">
+              <Label className="text-foreground font-medium mb-2">Password</Label>
+              <Input
+                value={formData.password}
+                onChangeText={(text: string) => handleInputChange('password', text)}
+                className={errors.password ? 'border-destructive' : ''}
+                placeholder={isLogin ? "Enter your password" : "Create a strong password"}
+                secureTextEntry
+                textContentType={isLogin ? "password" : "newPassword"}
+              />
+              {errors.password ? (
+                <Text className="text-destructive text-sm mt-1">{errors.password}</Text>
+              ) : null}
+            </View>
 
             {/* Confirm Password (Register only) */}
             {!isLogin && (
-              <InputField
-                label="Confirm Password"
-                value={formData.confirmPassword}
-                onChangeText={(text) => handleInputChange('confirmPassword', text)}
-                error={errors.confirmPassword}
-                placeholder="Confirm your password"
-                secureTextEntry
-                textContentType="newPassword"
-              />
+              <View className="mb-4">
+                <Label className="text-foreground font-medium mb-2">Confirm Password</Label>
+                <Input
+                  value={formData.confirmPassword}
+                  onChangeText={(text: string) => handleInputChange('confirmPassword', text)}
+                  className={errors.confirmPassword ? 'border-destructive' : ''}
+                  placeholder="Confirm your password"
+                  secureTextEntry
+                  textContentType="newPassword"
+                />
+                {errors.confirmPassword ? (
+                  <Text className="text-destructive text-sm mt-1">{errors.confirmPassword}</Text>
+                ) : null}
+              </View>
             )}
 
             {/* Forgot Password (Login only) */}
             {isLogin && (
-              <TouchableOpacity 
+              <Button 
+                variant="ghost"
                 onPress={onForgotPassword}
                 className="self-end"
               >
-                <Text className="text-blue-600 font-medium">
+                <Text className="text-primary font-medium">
                   Forgot Password?
                 </Text>
-              </TouchableOpacity>
+              </Button>
             )}
           </View>
 
           {/* Submit Button */}
-          <TouchableOpacity
+          <Button
             onPress={handleSubmit}
             disabled={isLoading}
-            className={`mt-6 bg-blue-600 rounded-lg py-4 ${
-              isLoading ? 'opacity-50' : ''
-            }`}
+            className="mt-6"
           >
-            {isLoading ? (
-              <ActivityIndicator color="white" size="small" />
-            ) : (
-              <Text className="text-white text-center font-semibold text-lg">
-                {isLogin ? 'Sign In' : 'Create Account'}
-              </Text>
-            )}
-          </TouchableOpacity>
+            <Text className="text-primary-foreground font-semibold text-lg">
+              {isLoading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
+            </Text>
+          </Button>
 
           {/* Toggle Auth Mode */}
           <View className="flex-row justify-center items-center mt-6">
-            <Text className="text-gray-600">
+            <Text className="text-muted-foreground">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
             </Text>
-            <TouchableOpacity onPress={toggleAuthMode}>
-              <Text className="text-blue-600 font-semibold">
+            <Button variant="ghost" onPress={toggleAuthMode} className="px-0">
+              <Text className="text-primary font-semibold">
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </Text>
-            </TouchableOpacity>
+            </Button>
           </View>
 
           {/* Trial Information (Register only) */}
           {!isLogin && (
-            <View className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <Text className="text-blue-800 font-semibold text-center mb-1">
-                🎉 3-Day Free Trial
-              </Text>
-              <Text className="text-blue-700 text-sm text-center">
-                Get full access to all therapy rooms and features. No credit card required.
-              </Text>
-            </View>
+            <Card className="mt-6 border-blue-200 bg-blue-50">
+              <CardContent className="p-4">
+                <Text className="text-blue-800 font-semibold text-center mb-1">
+                  🎉 3-Day Free Trial
+                </Text>
+                <Text className="text-blue-700 text-sm text-center">
+                  Get full access to all therapy rooms and features. No credit card required.
+                </Text>
+              </CardContent>
+            </Card>
           )}
+            </CardContent>
+          </Card>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

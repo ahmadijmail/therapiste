@@ -1,6 +1,6 @@
 import React from 'react';
-import { Stack } from 'expo-router';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { Stack, Link } from 'expo-router';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useAuthStore } from '~/src/stores/authStore';
 import { useRoomsStore } from '~/src/stores/roomsStore';
 
@@ -10,8 +10,20 @@ export default function Home() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <ScrollView style={styles.container} className="bg-white">
+      <Stack.Screen 
+        options={{ 
+          title: 'Home',
+          headerRight: () => (
+            <Link href="/modal" asChild>
+              <TouchableOpacity className="mr-4">
+                <Text className="text-xl">⚙️</Text>
+              </TouchableOpacity>
+            </Link>
+          ),
+        }} 
+      />
+
+      <ScrollView className="flex-1 bg-background px-6">
         {/* Welcome Header */}
         <View className="px-6 py-8">
           <Text className="text-2xl font-bold text-gray-900 mb-2">
@@ -104,9 +116,4 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-  },
-});
+
