@@ -3,13 +3,14 @@ import { Stack } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 import { ScreenContent } from '~/components/ScreenContent';
+import DatabaseTestComponent from '~/src/components/DatabaseTestComponent';
 
 export default function Home() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Tab One' }} />
+      <Stack.Screen options={{ title: 'Database Tests' }} />
       <View style={styles.container}>
-        <ScreenContent path="app/(tabs)/index.tsx" title="Tab One" />
+        <DatabaseTestComponent />
       </View>
     </>
   );
