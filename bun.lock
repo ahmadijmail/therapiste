@@ -32,6 +32,7 @@
         "@rn-primitives/toggle-group": "^1.2.0",
         "@rn-primitives/tooltip": "^1.2.0",
         "@supabase/supabase-js": "^2.38.4",
+        "@tanstack/react-query": "^5.80.6",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "expo": "^53.0.11",
@@ -603,6 +604,10 @@
     "@supabase/storage-js": ["@supabase/storage-js@2.7.1", "", { "dependencies": { "@supabase/node-fetch": "^2.6.14" } }, "sha512-asYHcyDR1fKqrMpytAS1zjyEfvxuOIp1CIXX7ji4lHHcJKqyk+sLl/Vxgm4sN6u8zvuUtae9e4kDxQP2qrwWBA=="],
 
     "@supabase/supabase-js": ["@supabase/supabase-js@2.50.0", "", { "dependencies": { "@supabase/auth-js": "2.70.0", "@supabase/functions-js": "2.4.4", "@supabase/node-fetch": "2.6.15", "@supabase/postgrest-js": "1.19.4", "@supabase/realtime-js": "2.11.10", "@supabase/storage-js": "2.7.1" } }, "sha512-M1Gd5tPaaghYZ9OjeO1iORRqbTWFEz/cF3pPubRnMPzA+A8SiUsXXWDP+DWsASZcjEcVEcVQIAF38i5wrijYOg=="],
+
+    "@tanstack/query-core": ["@tanstack/query-core@5.80.6", "", {}, "sha512-nl7YxT/TAU+VTf+e2zTkObGTyY8YZBMnbgeA1ee66lIVqzKlYursAII6z5t0e6rXgwUMJSV4dshBTNacNpZHbQ=="],
+
+    "@tanstack/react-query": ["@tanstack/react-query@5.80.6", "", { "dependencies": { "@tanstack/query-core": "5.80.6" }, "peerDependencies": { "react": "^18 || ^19" } }, "sha512-izX+5CnkpON3NQGcEm3/d7LfFQNo9ZpFtX2QsINgCYK9LT2VCIdi8D3bMaMSNhrAJCznRoAkFic76uvLroALBw=="],
 
     "@tybys/wasm-util": ["@tybys/wasm-util@0.9.0", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw=="],
 

@@ -6,7 +6,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { useAuthStore } from '../../../stores/authStore';
+import { useSignIn, useSignUp } from '../../../hooks/useAuth';
 import { validateEmail, validatePassword } from '../api/auth';
 import type { LoginCredentials, RegisterCredentials } from '../../../types';
 
@@ -36,9 +36,9 @@ export default function LoginForm({
     confirmPassword: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { signIn, signUp } = useAuthStore();
+  const signInMutation = useSignIn();
+  const signUpMutation = useSignUp();
 
   // Validate form data
   const validateForm = (): boolean => {
@@ -86,7 +86,6 @@ export default function LoginForm({
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    setIsLoading(true);
     try {
       if (isLogin) {
         // Login
@@ -95,7 +94,7 @@ export default function LoginForm({
           password: formData.password,
         };
 
-        await signIn(credentials);
+        await signInMutation.mutateAsync(credentials);
         Alert.alert('Success!', 'Welcome back to Therapiste!');
         onSuccess?.();
       } else {
@@ -106,7 +105,7 @@ export default function LoginForm({
           full_name: formData.fullName.trim(),
         };
 
-        await signUp(credentials);
+        await signUpMutation.mutateAsync(credentials);
         Alert.alert(
           'Welcome to Therapiste!', 
           'Your account has been created successfully. You now have a 3-day free trial to explore all our features!'
@@ -119,8 +118,6 @@ export default function LoginForm({
         'Error',
         error instanceof Error ? error.message : `${isLogin ? 'Login' : 'Registration'} failed. Please try again.`
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -261,11 +258,11 @@ export default function LoginForm({
           {/* Submit Button */}
           <Button
             onPress={handleSubmit}
-            disabled={isLoading}
+            disabled={signInMutation.isPending || signUpMutation.isPending}
             className="mt-6"
           >
             <Text className="text-primary-foreground font-semibold text-lg">
-              {isLoading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
+              {(signInMutation.isPending || signUpMutation.isPending) ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
             </Text>
           </Button>
 

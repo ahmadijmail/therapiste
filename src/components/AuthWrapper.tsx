@@ -9,20 +9,13 @@ interface AuthWrapperProps {
 
 export default function AuthWrapper({ children }: AuthWrapperProps) {
   const { user, initialized, loading } = useAuthStore();
+  
   const segments = useSegments();
-  const [isNavigationReady, setIsNavigationReady] = useState(false);
+
+  console.log('AuthWrapper state:', { initialized, loading, hasUser: !!user });
 
   useEffect(() => {
-    // Small delay to ensure navigation is ready
-    const timer = setTimeout(() => {
-      setIsNavigationReady(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (!initialized || loading || !isNavigationReady) return;
+    if (!initialized || loading ) return;
 
     const inAuthGroup = segments[0] === 'auth';
     const inOnboardingGroup = segments[0] === 'onboarding';
@@ -44,10 +37,11 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
         router.replace('/(tabs)');
       }
     }
-  }, [user, initialized, loading, isNavigationReady, segments]);
+  }, [user, initialized, loading, segments]);
 
+  
   // Show loading screen while initializing
-  if (!initialized || loading || !isNavigationReady) {
+  if (!initialized || loading ) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
         <ActivityIndicator size="large" color="#3B82F6" />

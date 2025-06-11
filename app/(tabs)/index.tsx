@@ -1,12 +1,13 @@
 import React from 'react';
 import { Stack, Link } from 'expo-router';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { useAuthStore } from '~/src/stores/authStore';
-import { useRoomsStore } from '~/src/stores/roomsStore';
+import { useUser, useSubscription } from '~/src/hooks/useAuth';
+import { useFeaturedRooms } from '~/src/hooks/useRooms';
 
 export default function Home() {
-  const { user } = useAuthStore();
-  const { featuredRooms } = useRoomsStore();
+  const { data: user } = useUser();
+  const { data: subscription } = useSubscription();
+  const { data: featuredRooms = [] } = useFeaturedRooms();
 
   return (
     <>
@@ -35,7 +36,7 @@ export default function Home() {
         </View>
 
         {/* Trial Status */}
-        {user?.subscription_status === 'trial' && (
+        {subscription?.status === 'trial' && (
           <View className="mx-6 mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <Text className="text-blue-800 font-semibold mb-1">
               🎉 Free Trial Active

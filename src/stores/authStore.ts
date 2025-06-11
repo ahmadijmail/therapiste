@@ -42,6 +42,13 @@ export const useAuthStore = create<AuthStore>()(
 
       // Initialize auth state
       initialize: async () => {
+        const { initialized } = get();
+        
+        // Don't initialize if already initialized
+        if (initialized) {
+          return;
+        }
+        
         try {
           set({ loading: true });
           
@@ -242,6 +249,7 @@ export const useAuthStore = create<AuthStore>()(
         session: state.session,
         subscription: state.subscription,
         initialized: state.initialized,
+        // Explicitly exclude loading from being persisted
       }),
     }
   )

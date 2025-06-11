@@ -12,6 +12,7 @@ import { Badge } from '~/src/components/ui/badge';
 
 export default function RoomsScreen() {
   const { rooms, loading, fetchRooms } = useRoomsStore();
+  
   const { user } = useAuthStore();
 
   useEffect(() => {
