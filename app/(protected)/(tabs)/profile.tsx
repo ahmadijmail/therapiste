@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Stack } from 'expo-router';
-import { View, ScrollView, TouchableOpacity, Alert, Dimensions } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Alert, Dimensions, Platform } from 'react-native';
 import { useUser, useSubscription, useSignOut, useRemainingTrialDays } from '~/src/hooks/useAuth';
 import { useRooms } from '~/src/hooks/useRooms';
 
@@ -11,8 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/src
 import { Badge } from '~/src/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '~/src/components/ui/avatar';
 import { Progress } from '~/src/components/ui/progress';
-
-const { width } = Dimensions.get('window');
 
 export default function ProfileScreen() {
   const { data: user } = useUser();
@@ -155,7 +153,7 @@ export default function ProfileScreen() {
         <View 
           className="bg-gradient-to-br from-blue-600 to-purple-700"
           style={{
-            width: width,
+            width: Platform.OS === 'web' ? '100%' : Dimensions.get('window').width,
             paddingTop: 100,
             paddingBottom: 30,
             paddingHorizontal: 24,
@@ -367,4 +365,4 @@ export default function ProfileScreen() {
       </ScrollView>
     </>
   );
-} 
+}

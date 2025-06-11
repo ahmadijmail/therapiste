@@ -5,7 +5,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Dimensions,
   ImageBackground,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,8 +18,6 @@ import { Text } from '~/src/components/ui/text';
 import { Input } from '~/src/components/ui/input';
 import { Label } from '~/src/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/src/components/ui/card';
-
-const { width, height } = Dimensions.get('window');
 
 interface LoginFormProps {
   onSuccess?: () => void;
