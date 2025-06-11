@@ -153,7 +153,7 @@ export default function ProfileScreen() {
         <View 
           className="bg-gradient-to-br from-blue-600 to-purple-700"
           style={{
-            width: Platform.OS === 'web' ? '100%' : Dimensions.get('window').width,
+           
             paddingTop: 100,
             paddingBottom: 30,
             paddingHorizontal: 24,
