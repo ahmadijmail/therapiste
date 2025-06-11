@@ -5,14 +5,14 @@ import { queryClient } from '~/src/lib/queryClient';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: 'auth',
+  initialRouteName: '(protected)',
 };
 
 export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack>
-        <Stack.Screen name="/(protected)" options={{ headerShown: false }} />
+      <Stack >
+        <Stack.Screen name="(protected)" options={{ headerShown: false }}/>
         <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
