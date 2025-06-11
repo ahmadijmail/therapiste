@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Stack } from 'expo-router';
 import { View, ScrollView } from 'react-native';
-import { useRoomsStore } from '~/src/stores/roomsStore';
-import { useAuthStore } from '~/src/stores/authStore';
+import { useRooms, useRefreshRooms } from '~/src/hooks/useRooms';
+import { useUser, useSubscription } from '~/src/hooks/useAuth';
 
 // shadcn/ui components
 import { Text } from '~/src/components/ui/text';
@@ -11,13 +11,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/src
 import { Badge } from '~/src/components/ui/badge';
 
 export default function RoomsScreen() {
-  const { rooms, loading, fetchRooms } = useRoomsStore();
-  
-  const { user } = useAuthStore();
+  const { data: rooms = [], isLoading, error, isError } = useRooms();
+  const { data: user } = useUser();
+  const { data: subscription } = useSubscription();
+  const refreshRooms = useRefreshRooms();
 
-  useEffect(() => {
-    fetchRooms();
-  }, []);
+  // Debug logging
+  console.log('RoomsScreen state:', { 
+    roomsCount: rooms.length, 
+    isLoading, 
+    isError, 
+    error: error?.message 
+  });
 
   const getRoomTypeIcon = (type: string) => {
     switch (type) {
@@ -53,12 +58,32 @@ export default function RoomsScreen() {
 
         {/* Rooms List */}
         <View className="px-6 space-y-4 mb-8">
-          {loading ? (
+          {isLoading ? (
             <Card>
               <CardContent className="p-6">
                 <Text className="text-center text-muted-foreground">
                   Loading therapy rooms...
                 </Text>
+              </CardContent>
+            </Card>
+          ) : isError ? (
+            <Card className="border-red-200">
+              <CardContent className="p-6">
+                <Text className="text-center text-red-600 font-semibold mb-2">
+                  Error loading rooms
+                </Text>
+                <Text className="text-center text-muted-foreground mb-4">
+                  {error?.message || 'Something went wrong'}
+                </Text>
+                <Button 
+                  variant="outline"
+                  onPress={() => refreshRooms.mutate()}
+                  className="w-full"
+                >
+                  <Text className="text-primary font-medium">
+                    Try Again
+                  </Text>
+                </Button>
               </CardContent>
             </Card>
           ) : rooms.length > 0 ? (
@@ -119,11 +144,11 @@ export default function RoomsScreen() {
 
                   <Button 
                     className="w-full"
-                    disabled={room.is_premium && user?.subscription_status !== 'trial' && user?.subscription_status !== 'active'}
+                    disabled={room.is_premium && subscription?.status !== 'trial' && subscription?.status !== 'active'}
                     onPress={() => console.log('Navigate to room:', room.slug)}
                   >
                     <Text className="text-primary-foreground font-semibold">
-                      {room.is_premium && user?.subscription_status !== 'trial' && user?.subscription_status !== 'active' 
+                      {room.is_premium && subscription?.status !== 'trial' && subscription?.status !== 'active' 
                         ? 'Upgrade to Access'
                         : 'Enter Room'
                       }
@@ -140,7 +165,7 @@ export default function RoomsScreen() {
                 </Text>
                 <Button 
                   variant="outline"
-                  onPress={() => fetchRooms()}
+                  onPress={() => refreshRooms.mutate()}
                   className="w-full"
                 >
                   <Text className="text-primary font-medium">
@@ -153,7 +178,7 @@ export default function RoomsScreen() {
         </View>
 
         {/* Trial Information */}
-        {user?.subscription_status === 'trial' && (
+        {subscription?.status === 'trial' && (
           <View className="px-6 mb-8">
             <Card className="border-blue-200 bg-blue-50">
               <CardContent className="p-4">

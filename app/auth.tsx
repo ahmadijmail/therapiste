@@ -6,7 +6,7 @@ import LoginForm from '~/src/features/auth/components/LoginForm';
 export default function AuthScreen() {
   const handleAuthSuccess = () => {
     // Navigate to main app after successful authentication
-    router.replace('/(tabs)');
+      router.replace('/(protected)/(tabs)');
   };
 
   const handleForgotPassword = () => {

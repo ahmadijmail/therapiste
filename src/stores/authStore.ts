@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase, getCurrentUser, getUserProfile, checkSubscriptionStatus } from '../lib/supabase';
+import { supabase, getUserProfile, checkSubscriptionStatus } from '../lib/supabase';
 import type { 
   AuthState, 
   LoginCredentials, 
@@ -255,32 +255,3 @@ export const useAuthStore = create<AuthStore>()(
   )
 );
 
-// Set up auth state change listener
-supabase.auth.onAuthStateChange(async (event, session) => {
-  const store = useAuthStore.getState();
-  
-  if (event === 'SIGNED_IN' && session?.user) {
-    try {
-      const profile = await getUserProfile(session.user.id);
-      const subscriptionStatus = await checkSubscriptionStatus(session.user.id);
-      
-      useAuthStore.setState({
-        user: profile,
-        session,
-        subscription: subscriptionStatus,
-      });
-    } catch (error) {
-      console.error('Auth state change error:', error);
-    }
-  } else if (event === 'SIGNED_OUT') {
-    useAuthStore.setState({
-      user: null,
-      session: null,
-      subscription: {
-        status: 'trial',
-        canAccessPremium: false,
-        daysRemaining: 0,
-      },
-    });
-  }
-}); 

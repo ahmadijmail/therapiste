@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { supabase, getCurrentUser, getUserProfile, checkSubscriptionStatus } from '../lib/supabase';
+import { supabase,  getUserProfile, checkSubscriptionStatus } from '../lib/supabase';
 import { queryKeys } from '../lib/queryClient';
 import type { LoginCredentials, RegisterCredentials, User, SubscriptionState } from '../types';
 
@@ -69,7 +69,7 @@ export function useSignIn() {
       queryClient.invalidateQueries({ queryKey: queryKeys.profile.subscription });
       
       // Navigate to main app
-      router.replace('/(tabs)');
+      router.replace('/(protected)/(tabs)');
     },
     onError: (error) => {
       console.error('Sign in error:', error);
@@ -109,7 +109,7 @@ export function useSignUp() {
       queryClient.invalidateQueries({ queryKey: queryKeys.profile.subscription });
       
       // Navigate to main app
-      router.replace('/(tabs)');
+      router.replace('/(protected)/(tabs)');
     },
     onError: (error) => {
       console.error('Sign up error:', error);
@@ -178,7 +178,7 @@ export function useCompleteOnboarding() {
     },
     onSuccess: () => {
       // Navigate to main app after onboarding
-      router.replace('/(tabs)');
+      router.replace('/(protected)/(tabs)');
     },
   });
 }

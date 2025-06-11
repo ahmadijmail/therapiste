@@ -9,7 +9,7 @@ export default function OnboardingScreen() {
   const handleCompleteOnboarding = async () => {
     try {
       await completeOnboarding();
-      router.replace('/(tabs)');
+      router.replace('/(protected)/(tabs)');
     } catch (error) {
       console.error('Error completing onboarding:', error);
     }
